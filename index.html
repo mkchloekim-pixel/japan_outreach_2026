@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>2026 주바라기 일본 아웃리치</title>
+<meta name="theme-color" content="#0B2545">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="일본아웃리치">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+  :root{
+    --navy:#0B2545;
+    --red:#E11C1C;
+    --pink:#FCE4EC;
+    --peach:#FDECE0;
+    --yellow:#FFF7D6;
+    --green:#E8F5E9;
+    --greenText:#2E7D32;
+    --blue:#E3F2FD;
+    --purple:#F3E5F5;
+    --purpleText:#7B1FA2;
+    --gray:#EDEDED;
+    --ink:#1B2430;
+    --sub:#5b6472;
+    --card:#ffffff;
+    --line:#dfe3e8;
+    --radius:16px;
+    --maxw:520px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    background:#f4f5f7;
+    color:var(--ink);
+    -webkit-tap-highlight-color:transparent;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;background:#fff;min-height:100vh;position:relative;}
+
+  /* ---- header / nav ---- */
+  header.top{
+    position:sticky;top:0;z-index:50;
+    background:var(--navy);color:#fff;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 14px;
+  }
+  header.top .title{font-weight:800;font-size:15px;letter-spacing:-0.2px;}
+  header.top .title small{display:block;font-weight:500;font-size:11px;opacity:.75;}
+  .burger{
+    width:38px;height:38px;border-radius:10px;border:none;background:rgba(255,255,255,.12);
+    color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;
+  }
+  nav.drawer{
+    position:fixed;top:0;right:-100%;width:82%;max-width:340px;height:100%;
+    background:#fff;z-index:100;box-shadow:-8px 0 24px rgba(0,0,0,.15);
+    transition:right .25s ease;overflow-y:auto;
+  }
+  nav.drawer.open{right:0;}
+  nav.drawer .nav-head{background:var(--navy);color:#fff;padding:20px 18px;}
+  nav.drawer .nav-head b{font-size:16px;}
+  nav.drawer .nav-head span{display:block;font-size:12px;opacity:.7;margin-top:4px;}
+  nav.drawer ul{list-style:none;margin:0;padding:8px;}
+  nav.drawer li a{
+    display:block;padding:13px 12px;border-radius:10px;color:var(--ink);text-decoration:none;
+    font-size:14.5px;font-weight:600;border-bottom:1px solid #f0f0f0;
+  }
+  nav.drawer li a:active{background:#f4f5f7;}
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:90;opacity:0;pointer-events:none;transition:opacity .2s;}
+  .scrim.show{opacity:1;pointer-events:auto;}
+
+  /* ---- cover ---- */
+  .cover{
+    padding:56px 24px 40px;text-align:center;position:relative;overflow:hidden;
+    background:linear-gradient(#fff,#fff);
+  }
+  .cover .sun{width:150px;height:150px;border-radius:50%;background:var(--red);margin:0 auto 18px;}
+  .cover h1{font-size:32px;color:var(--navy);margin:6px 0 0;letter-spacing:-0.5px;}
+  .cover h1 .jp{color:var(--red);display:block;font-size:34px;margin-top:2px;}
+  .cover .date{margin-top:14px;font-weight:700;color:var(--navy);font-size:15px;}
+  .cover .sub{margin-top:6px;color:var(--sub);font-size:13px;}
+  .cover .offline-badge{
+    display:inline-block;margin-top:18px;background:var(--green);color:var(--greenText);
+    font-size:12px;font-weight:700;padding:6px 12px;border-radius:20px;
+  }
+  .verse-block{padding:0 20px 30px;}
+  .verse-title{text-align:center;font-size:20px;font-weight:800;color:var(--navy);margin-bottom:14px;}
+  .name-blank{
+    border:none;border-bottom:2.5px solid var(--navy);background:transparent;
+    font-size:20px;font-weight:800;color:var(--red);text-align:center;
+    width:110px;padding:0 2px 2px;font-family:inherit;
+  }
+  .name-blank:focus{outline:none;border-bottom-color:var(--red);}
+  .name-blank::placeholder{color:#b9c2ce;font-weight:600;}
+  .verse-cards{display:flex;gap:10px;}
+  .verse-card{
+    flex:1;border:1.5px solid var(--navy);border-radius:4px;padding:14px 12px;
+    font-size:12.5px;line-height:1.7;color:var(--navy);text-align:center;background:#fff;
+    position:relative;
+  }
+  .verse-card small{display:block;margin-top:8px;color:var(--sub);font-weight:700;}
+
+  /* ---- sections ---- */
+  section{padding:0 0 8px;}
+  .sec-head{
+    padding:26px 20px 14px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .sec-head h2{margin:0;font-size:21px;font-weight:800;color:var(--navy);}
+  .sec-head .num{font-size:12px;color:var(--sub);font-weight:700;}
+  .sec-pink .sec-head{background:var(--pink);}
+  .sec-peach .sec-head{background:var(--peach);}
+  .sec-yellow .sec-head{background:var(--yellow);}
+  .sec-green .sec-head{background:var(--green);}
+  .sec-blue .sec-head{background:var(--blue);}
+  .sec-purple .sec-head{background:var(--purple);}
+  .sec-gray .sec-head{background:var(--gray);}
+
+  .block{padding:14px 20px;}
+  .block h3{font-size:15px;margin:0 0 10px;color:var(--navy);font-weight:800;}
+  .block p{font-size:13.5px;line-height:1.75;color:var(--ink);margin:4px 0;}
+  .fact-list{margin:0;padding:0;list-style:none;}
+  .fact-list li{font-size:13.5px;line-height:1.9;padding:2px 0;}
+  .fact-list b{color:var(--navy);}
+
+  table.tbl{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:4px;}
+  table.tbl th,table.tbl td{border:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top;}
+  table.tbl th{background:#f7f8fa;color:var(--navy);font-weight:700;}
+  .day-table td.day{background:var(--navy);color:#fff;font-weight:700;text-align:center;white-space:nowrap;}
+
+  .contact-card{
+    border:1.5px solid var(--navy);border-radius:14px;padding:12px 14px;margin-top:10px;font-size:12.5px;line-height:1.8;
+  }
+  .contact-card b{color:var(--navy);}
+
+  .flight-card{background:#f7f8fa;border-radius:12px;padding:12px 14px;margin-top:8px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .flight-card .lbl{font-weight:800;color:var(--navy);font-size:13px;width:52px;}
+  .flight-card .mid{flex:1;text-align:center;font-size:11px;color:var(--sub);}
+  .flight-card .time{font-size:17px;font-weight:800;color:var(--ink);}
+  .flight-card .code{background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-weight:700;font-size:12px;}
+
+  /* 일본어 표현 카드 */
+  .jp-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #f0f0f0;font-size:12.8px;gap:6px;}
+  .jp-row:last-child{border-bottom:none;}
+  .jp-row .kr{flex:1;color:var(--ink);}
+  .jp-row .jp{flex:1;color:var(--navy);font-weight:600;}
+  .jp-row .ro{flex:1.1;color:var(--red);font-weight:700;font-size:12px;}
+  .jp-cat{font-size:13px;font-weight:800;color:var(--navy);margin:16px 0 6px;padding-top:6px;border-top:2px solid var(--navy);}
+  .jp-cat:first-child{margin-top:0;border-top:none;padding-top:0;}
+
+  /* 영생얻는길 */
+  .step-card{
+    border-radius:14px;padding:16px;margin:0 20px 14px;position:relative;overflow:hidden;
+  }
+  .step-card .stepnum{position:absolute;right:12px;top:6px;font-size:44px;font-weight:900;opacity:.9;}
+  .step-card h4{margin:0 0 8px;font-size:14.5px;font-weight:800;max-width:80%;}
+  .step-card p{font-size:12.8px;line-height:1.7;margin:4px 0;max-width:82%;}
+  .step-card .jp{font-size:11.8px;color:#00000099;}
+  .step-card .ref{font-size:11.5px;font-weight:700;margin-top:6px;}
+  .s1{background:#FDEBEC;} .s1 .stepnum{color:#D64545;}
+  .s2{background:#FDF0E4;} .s2 .stepnum{color:#D97B3F;}
+  .s3{background:#EAF6EC;} .s3 .stepnum{color:#3E9455;}
+  .s4{background:#F6ECF5;} .s4 .stepnum{color:#A94FA0;}
+  .s5{background:#E7F1FB;} .s5 .stepnum{color:#3B7DC4;}
+
+  /* 달달말씀 카드 */
+  .sw-grid{padding:6px 20px 20px;display:grid;grid-template-columns:1fr;gap:10px;}
+  .sw-card{
+    border:1.6px solid #6FBF73;border-radius:14px;padding:12px 14px;font-size:12.6px;line-height:1.7;
+    position:relative;background:#fff;
+  }
+  .sw-card .tag{
+    display:inline-block;background:#4C9A54;color:#fff;font-size:11px;font-weight:800;
+    padding:3px 9px;border-radius:20px;margin-bottom:6px;
+  }
+  .sw-card .ref{display:block;margin-top:5px;color:#4C9A54;font-weight:700;font-size:11.5px;}
+
+  /* 매일의양식 / 오늘의사역 day card */
+  .day-card{margin:0 20px 22px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;}
+  .day-card .day-bar{
+    background:var(--navy);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;
+  }
+  .day-card .day-bar .badge{background:#fff;color:var(--navy);font-weight:800;font-size:12px;padding:4px 10px;border-radius:20px;}
+  .day-card .day-bar .date{font-weight:700;font-size:13px;}
+  .day-card .content{padding:14px 16px;}
+  .day-card .qtitle{font-size:15px;font-weight:800;color:var(--navy);margin:0 0 8px;}
+  .day-card .ref{font-size:12.5px;font-weight:700;color:var(--red);margin-bottom:6px;}
+  .day-card .scripture{font-size:12.8px;line-height:1.85;color:var(--ink);white-space:pre-line;}
+  .day-card .scripture sup{color:var(--red);font-weight:800;margin-right:2px;}
+  .mind-box{
+    margin-top:14px;border:1.6px dashed #7C8FA8;border-radius:12px;padding:12px;background:#F8FAFC;
+  }
+  .mind-box .htag{font-size:12.5px;font-weight:800;color:var(--navy);margin-bottom:6px;}
+  .mind-box .prompt{font-size:12.3px;line-height:1.7;color:#3a4552;margin-bottom:8px;}
+  textarea.note{
+    width:100%;min-height:88px;border:1px solid var(--line);border-radius:10px;padding:10px;
+    font-size:13px;line-height:1.6;font-family:inherit;resize:vertical;background:#fff;color:var(--ink);
+  }
+  textarea.note:focus{outline:2px solid var(--navy);outline-offset:1px;}
+  .save-row{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:6px;}
+  .save-status{font-size:11.5px;color:#4C9A54;font-weight:700;opacity:0;transition:opacity .3s;}
+  .save-status.show{opacity:1;}
+  .ministry-box{padding:14px 16px;}
+  .ministry-box .lbl{font-size:12.8px;font-weight:800;color:var(--purpleText);margin:12px 0 6px;}
+  .ministry-box .lbl:first-child{margin-top:0;}
+
+  /* 은혜의 찬양 */
+  .song-pdf-btn{
+    display:flex;align-items:center;gap:10px;margin:0 20px 16px;padding:14px 16px;
+    background:var(--navy);color:#fff;border-radius:14px;text-decoration:none;font-weight:800;font-size:13.5px;
+  }
+  .song-pdf-btn .ic{font-size:20px;}
+  .song-pdf-btn small{display:block;font-weight:500;font-size:11px;opacity:.8;margin-top:2px;}
+  .song-list{margin:0 20px;border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+  .song-item{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid #f0f0f0;font-size:12.8px;}
+  .song-item:last-child{border-bottom:none;}
+  .song-item .no{width:22px;color:var(--sub);font-weight:700;font-size:11.5px;}
+  .song-item .nm{flex:1;font-weight:700;color:var(--ink);}
+  .song-item .cp{color:var(--sub);font-size:11px;text-align:right;}
+  .song-note{margin:12px 20px 0;font-size:11.5px;color:var(--sub);line-height:1.7;background:#f7f8fa;padding:10px 12px;border-radius:10px;}
+
+  /* 주의사항 */
+  .caution-card{margin:0 20px 14px;border-radius:14px;background:#fff;border:1px solid var(--line);overflow:hidden;}
+  .caution-card .ch{padding:11px 14px;font-weight:800;font-size:13.5px;color:var(--navy);background:#f7f8fa;display:flex;gap:8px;align-items:center;}
+  .caution-card ul{margin:0;padding:10px 14px 12px 30px;font-size:12.6px;line-height:1.8;}
+  .caution-card p.intro{margin:8px 14px 0;font-size:12.4px;color:var(--sub);}
+  .caution-card ol{margin:8px 14px 12px 26px;font-size:12.4px;line-height:1.8;}
+
+  .emg-box{margin:0 20px 20px;border:2px solid var(--red);border-radius:14px;padding:14px;font-size:12.8px;line-height:1.9;}
+  .emg-box b{color:var(--red);}
+
+  footer.site{padding:26px 20px 40px;text-align:center;color:var(--sub);font-size:11.5px;line-height:1.8;}
+
+  h2.jump-anchor{scroll-margin-top:64px;}
+  section{scroll-margin-top:60px;}
+</style>
+</head>
+<body>
+<div class="scrim" id="scrim"></div>
+<nav class="drawer" id="drawer">
+  <div class="nav-head">
+    <b>2026 주바라기</b>
+    <span>일본 아웃리치 가이드북</span>
+  </div>
+  <ul id="navList"></ul>
+</nav>
+
+<div class="wrap">
+  <header class="top">
+    <div class="title">2026 주바라기 일본 아웃리치<small>Worship School Japan Outreach · 2026.08.08–13</small></div>
+    <button class="burger" id="burgerBtn" aria-label="메뉴">☰</button>
+  </header>
+
+  <!-- 표지 -->
+  <div class="cover">
+    <div class="sun"></div>
+    <h1>OUTREACH<span class="jp">JAPAN</span></h1>
+    <div class="date">2026.08.08 ~ 08.13</div>
+    <div class="sub">예배자학교 주바라기 · 2026 아웃리치 가이드북</div>
+    <div class="offline-badge">🎉 오프라인에서도 사용 가능해요</div>
+  </div>
+
+  <div class="verse-block">
+    <div class="verse-title">나는 <input type="text" id="myNameInput" class="name-blank" placeholder="이름" maxlength="10"> 입니다</div>
+    <div class="verse-cards">
+      <div class="verse-card">
+        보라 내가 새 일을 행하리니 이제 나타낼 것이라 너희가 그것을 알지 못하겠느냐 정녕히 내가 광야에 길과 사막에 강을 내리니
+        <small>이사야 43:19</small>
+      </div>
+      <div class="verse-card">
+        見よ、新しいことをわたしは行う。今や、それは芽生えている。あなたたちはそれを悟らないのか。わたしは荒れ野に道を敷き砂漠に大河を流れさせる
+        <small>イザヤ書 43:19</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. 선교의 여정 -->
+  <section id="sec-journey" class="sec-pink">
+    <div class="sec-head"><span class="num">01</span><h2 class="jump-anchor">선교의 여정</h2></div>
+
+    <div class="block">
+      <h3>1. 일본에 대해서</h3>
+      <ul class="fact-list">
+        <li><b>일본(日本, にほん/にっぽん)</b> : 해가 가장 먼저 뜨는 나라</li>
+        <li><b>수도</b> : 도쿄(Tokyo) — 약 1,400만 명</li>
+        <li><b>인구</b> : 약 1억 2,700만 명 (한국 약 5천만 명)</li>
+        <li><b>위치</b> : 혼슈·홋카이도·규슈·시코쿠(4대 섬) 포함 6,852개 섬</li>
+        <li><b>기후</b> : 섬나라로 J자 형태. 사계절이 뚜렷하고 해양성 온대 기후</li>
+        <li><b>정부</b> : 간접 민주주의, 입헌군주국, 내각책임제</li>
+        <li><b>국가원수</b> : 126대 일왕(나루히토)</li>
+        <li><b>종교</b> : 신토(神道)와 불교 (개신교 0.4%)</li>
+      </ul>
+    </div>
+
+    <div class="block">
+      <h3>2. 항공 일정</h3>
+      <div class="flight-card">
+        <div class="lbl">8/8<br>출국</div>
+        <div>
+          <div class="time">08:25</div>
+          <div class="mid" style="text-align:left">ICN 터미널2</div>
+        </div>
+        <div class="mid">2시간 25분<br>직항</div>
+        <div>
+          <div class="time">10:50</div>
+          <div class="mid" style="text-align:right">NRT 터미널1</div>
+        </div>
+        <div class="code">OZ107</div>
+      </div>
+      <div class="flight-card">
+        <div class="lbl">8/13<br>귀국</div>
+        <div>
+          <div class="time">19:45</div>
+          <div class="mid" style="text-align:left">NRT 터미널1</div>
+        </div>
+        <div class="mid">2시간 30분<br>직항</div>
+        <div>
+          <div class="time">22:15</div>
+          <div class="mid" style="text-align:right">ICN 터미널2</div>
+        </div>
+        <div class="code">OZ105</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>3. 일자별 주요 일정</h3>
+      <table class="tbl day-table" id="scheduleTable"></table>
+    </div>
+
+    <div class="block">
+      <h3>4. 주요 연락처</h3>
+      <div class="contact-card">
+        <b>주일본대사관</b><br>
+        주소 : 〒106-0047 東京都港区南麻布 1-2-5<br>
+        전화(대표) : +81-3-3452-7611/9<br>
+        전화(긴급) : +81-70-2153-5454<br>
+        홈페이지 : jp.mofa.go.kr
+      </div>
+      <div class="contact-card">
+        <b>현지 교회</b><br>
+        주소 : 〒121-0807 2-1-10 Ikohonmachi, Adachi-ku, Tokyo<br>
+        전화(이윤주 선교사님) : 03-5837-4490<br>
+        홈페이지 : kaminokazoku.com
+      </div>
+      <div class="contact-card">
+        <b>인솔 연락처</b><br>
+        전재은 010-3326-9146 · 이유리 010-9088-5281 · 최서연 010-5253-9761
+      </div>
+      <div class="emg-box">
+        <b>🚨 응급 연락처</b><br>
+        일본 긴급번호 : 경찰 <b>110</b> / 소방·구급 <b>119</b><br>
+        팀장 연락처는 출발 전 개인 휴대폰에 꼭 저장해두세요.
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 선교 일본어 -->
+  <section id="sec-japanese" class="sec-peach">
+    <div class="sec-head"><span class="num">02</span><h2 class="jump-anchor">선교 일본어</h2></div>
+    <div class="block" id="jpBlock"></div>
+  </section>
+
+  <!-- 3. 영생 얻는 길 -->
+  <section id="sec-gospel" class="sec-yellow">
+    <div class="sec-head"><span class="num">03</span><h2 class="jump-anchor">영생 얻는 길</h2></div>
+    <div id="gospelBlock"></div>
+  </section>
+
+  <!-- 4. 달달 말씀 -->
+  <section id="sec-sweetwords" class="sec-green">
+    <div class="sec-head"><span class="num">04</span><h2 class="jump-anchor">달달 말씀</h2></div>
+    <div class="sw-grid" id="swGrid"></div>
+  </section>
+
+  <!-- 5. 매일의 양식 -->
+  <section id="sec-daily" class="sec-blue">
+    <div class="sec-head"><span class="num">05</span><h2 class="jump-anchor">매일의 양식</h2></div>
+    <p style="margin:0 20px 14px;font-size:12.3px;color:var(--sub);">말씀을 읽고 마음톡 아래 빈칸에 나의 생각을 적어보세요. 적은 내용은 자동으로 저장되어, 앱을 닫았다 다시 열어도 남아있어요.</p>
+    <div id="dailyBlock"></div>
+  </section>
+
+  <!-- 6. 오늘의 사역 -->
+  <section id="sec-ministry" class="sec-purple">
+    <div class="sec-head"><span class="num">06</span><h2 class="jump-anchor">오늘의 사역</h2></div>
+    <p style="margin:0 20px 14px;font-size:12.3px;color:var(--sub);">오늘 하루 사역하면서 있었던 일과 감사한 일, 그리고 오늘의 기도를 적어보세요. 적은 내용은 자동 저장돼요.</p>
+    <div id="ministryBlock"></div>
+  </section>
+
+  <!-- 7. 은혜의 찬양 -->
+  <section id="sec-praise" class="sec-blue">
+    <div class="sec-head"><span class="num">07</span><h2 class="jump-anchor">은혜의 찬양</h2></div>
+    <a class="song-pdf-btn" href="praise-songs.pdf" target="_blank" rel="noopener">
+      <span class="ic">🎼</span>
+      <span>찬양 악보집 PDF 열기<small>버스킹 · 거리전도 악보집 (전체 보기)</small></span>
+    </a>
+    <div class="song-list" id="songList"></div>
+    <p class="song-note">저작권 보호를 위해 악보(가사·코드)는 이 페이지에 직접 싣지 않았어요. 위 버튼으로 원본 PDF를 열어 확인해주세요. PDF도 한 번 열어두면 오프라인에서 다시 볼 수 있어요.</p>
+  </section>
+
+  <!-- 8. 주의사항 -->
+  <section id="sec-caution" class="sec-gray">
+    <div class="sec-head"><span class="num">08</span><h2 class="jump-anchor">주의사항</h2></div>
+    <div id="cautionBlock"></div>
+  </section>
+
+  <!-- 9. 칭찬노트 -->
+  <section id="sec-note" class="sec-pink">
+    <div class="sec-head"><span class="num">09</span><h2 class="jump-anchor">칭찬노트</h2></div>
+    <div class="day-card" style="margin:0 20px;">
+      <div class="content">
+        <p style="font-size:12.5px;color:var(--sub);margin-top:0;">오늘 만난 친구나 함께한 팀원에게 칭찬하고 싶은 말을 자유롭게 적어보세요.</p>
+        <textarea class="note" id="praiseNote" placeholder="여기에 칭찬을 적어주세요 ✏️" style="min-height:160px;"></textarea>
+        <div class="save-row"><span class="save-status" id="praiseStatus">저장됨 ✓</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site">
+    2026 예배자학교 주바라기 일본 아웃리치<br>
+    이 페이지는 오프라인에서도 작동해요. 홈 화면에 추가해두고 사용해보세요 🙏
+  </footer>
+</div>
+
+<script>
+/* ================= DATA ================= */
+
+const schedule = [
+  ["8.8(토)","입국","신주쿠 땅밟기 &amp; 버스킹",""],
+  ["8.9(주일)","주일 예배 특송","어린이예배 특송","몽골예배 특송"],
+  ["8.10(월)","목사님특강 &amp; 복음쪽지전도","아사쿠사 땅밟기 &amp; 버스킹","오시아게 거리전도"],
+  ["8.11(화)","우에노 홀리스사역","신토요쿠 거리전도","오다이바 거리전도"],
+  ["8.12(수)","어린이전도 &amp; 복음공연","문화이벤트","교회 청소"],
+  ["8.13(목)","사역나눔","귀국",""]
+];
+
+const jpTables = [
+  { cat:"인사 및 기본회화", rows:[
+    ["안녕하세요(아침)","おはようございます","오하요고자이마스"],
+    ["안녕하세요(점심)","こんにちは","곤니치와"],
+    ["안녕하세요(저녁)","こんばんは","곤방와"],
+    ["감사합니다","ありがとうございます","아리가토우고자이마스"],
+    ["실례합니다/죄송합니다","すみません","스미마셍"],
+    ["괜찮습니다","だいじょうぶです","다이죠부데스"],
+    ["저는 한국에서 왔습니다","私は韓国から来ました","와타시와 캉코쿠카라 키마시타"],
+    ["이 번호로 전화를 걸어주세요","この番号に電話をかけてください","고노 반고니 덴와오 카케테 쿠다사이"]
+  ]},
+  { cat:"교통 회화", rows:[
+    ["○○는 어디입니까?","○○はどこですか?","○○와 도코데스까?"],
+    ["○○까지는 얼마나 걸리나요?","○○はどれぐらいかかりますか?","○○와 도레구라이 가가리마스까?"],
+    ["○○출구는 어느 쪽입니까?","○○出口はどちらですか?","○○데구치와 도치라 데스까?"]
+  ]},
+  { cat:"식당 회화", rows:[
+    ["저기요","すみません","스미마셍"],
+    ["메뉴판을 주세요","メニューをください","메뉴오구다사이"],
+    ["주문할게요","ちゅうもんします","츄몬시마스"],
+    ["이걸 주세요","これをください","코레오 구다사이"],
+    ["얼마에요?","いくらですか?","이꾸라데스까?"],
+    ["계산해주세요","おかいけい おねがいします","오카이케이 오네가이시마스"],
+    ["영수증을 주세요","レシートください","레시토 구다사이"]
+  ]},
+  { cat:"전도 회화", rows:[
+    ["한번 읽어보세요","よかったら読んでみてください","요캇타라 욘데미테 쿠다사이"],
+    ["예수님은 당신을 사랑하십니다","イエス様はあなたを愛しています","이에스사마와 아나타오 아이시테이마스"],
+    ["당신은 혼자가 아닙니다","あなたは一人ではありません","아나타와 히토리데와 아리마센"],
+    ["예수님은 당신을 소중히 여기십니다","イエス様はあなたをとても大切に思っておられます","이에스사마와 아나타오 토테모 타이세츠니 오못테오라레마스"],
+    ["언제나 당신과 함께 계십니다","イエス様はいつもあなたと一緒にいます","이에스사마와 이츠모 아나타토 잇쇼니 이마스"],
+    ["예수님은 당신에게 평안을 주십니다","イエス様はあなたに平安を与えます","이에스사마와 아나타니 헤이안오 아타에마스"],
+    ["예수님과 함께라면 괜찮습니다","イエス様と一緒なら大丈夫です","이에스사마토 잇쇼나라 다이죠오부데스"],
+    ["시간 내주셔서 감사합니다","お時間ありがとうございました","오지칸 아리가토오 고자이마시타"],
+    ["조심히 가세요","お気をつけてください","오키오 츠케테 쿠다사이"],
+    ["저는 예수님을 전하기 위해 일본에 왔습니다","私はイエス様のことを伝えるために日本に来ました","와타시와 이에스사마노 코토오 츠타에루 타메니 니혼니 키마시타"],
+    ["일회용 티슈입니다. 받아가세요","ポケットティッシュです。どうぞお受け取りください。","포켓토 팃슈 데스. 도조 오우케토리 쿠다사이."],
+    ["한국의 디저트입니다. 맛있게 드세요","韓国のお菓子です。おいしく召し上がってください","캉코쿠노 오카시 데스. 오이시쿠 메시아갓테 쿠다사이"],
+    ["들어주셔서 감사합니다","聞いてくれてありがとう","키이테쿠레테 아리가토"],
+    ["행복한 하루 되세요","良い一日をお過ごしください。","요이 이치니치오 오스고시 쿠다사이"]
+  ]}
+];
+
+const gospel = [
+  { cls:"s1", title:"神が最初に創られた人は、", title2:"하나님께서 처음 창조하신 사람은",
+    jp:"神様と交わりながら生きてきました。しかし、人が罪を犯してしまい、すべての人は神様との関係が断たれてしまいました。",
+    kr:"하나님과 교제하며 살아왔습니다. 그러나 사람이 죄를 짓게 되었고, 모든 사람은 하나님과의 관계가 끊어지고 말았습니다.", ref:"" },
+  { cls:"s2", title:"人は自らの力によって救いを得ることはできません。", title2:"사람은 자신의 힘으로는 구원을 얻을 수 없습니다.",
+    jp:"罪の問題が解決されないかぎり、人は神様のもとに近づくことができません。",
+    kr:"죄의 문제가 해결되지 않는 한, 사람은 하나님께 가까이 갈 수 없습니다.", ref:"로마서 3:23" },
+  { cls:"s3", title:"ただ神の御子であられるイエス・キリストだけが", title2:"오직 하나님의 아들이신 예수 그리스도만이",
+    jp:"人の罪を解決する唯一の道です。あなたもイエス様を信じてお受け入れすれば、救いを得ることができます。",
+    kr:"사람의 죄를 해결하는 유일한 길입니다. 당신도 예수님을 믿고 영접하면 구원을 받을 수 있습니다.", ref:"사도행전 4:12" },
+  { cls:"s4", title:"イエス様を信じて、永遠の命をいただきたいです。", title2:"예수님을 믿고 영원한 생명을 얻기 원합니다.",
+    jp:"イエス様が私の代わりに死んでくださって私の罪の代価を払ってくださり、復活されたことを信じます。私の心に入って、私の人生を導いてください。",
+    kr:"예수님께서 저를 대신하여 죽으시고 제 죄의 값을 치르셨으며, 부활하셨음을 믿습니다. 제 마음에 들어오셔서 제 삶을 인도하여 주십시오.", ref:"요한복음 5:24" },
+  { cls:"s5", title:"教会に出席することが大切です。", title2:"교회에 출석하는 것이 중요합니다.",
+    jp:"神が望まれる豊かな人生を生きたいと望まれるなら、神の言葉を正しく伝える近くの教会に行って牧師の指導を受けてください。",
+    kr:"하나님께서 원하시는 풍성한 삶을 살기 원한다면, 가까운 교회에 가서 목사님의 지도를 받으십시오.", ref:"" }
+];
+
+const sweetWords = [
+  "너희는 내게 배우고 받고 듣고 본 바를 행하라 그리하면 평강의 하나님이 너희와 함께 계시리라(빌립보서 4:9)",
+  "여호와는 나의 목자시니 내게 부족함이 없으리로다 그가 나를 푸른 풀밭에 누이시며 쉴 만한 물 가로 인도하시는도다(시편 23:1~2)",
+  "주의 말씀은 내 발에 등이요 내 길에 빛이니이다(시편 119:105)",
+  "하나님의 말씀은 살아 있고 활력이 있어 좌우에 날선 어떤 검보다도 예리하여 혼과 영과 및 관절과 골수를 찔러 쪼개기까지 하며 또 마음의 생각과 뜻을 판단하나니(히브리서 4:12)",
+  "내가 그리스도와 함께 십자가에 못박혔나니 그런즉 이제는 내가 사는 것이 아니요 오직 내 안에 그리스도께서 사시는 것이라 이제 내가 육체 가운데 사는 것은 나를 사랑하사 나를 위하여 자기 자신을 버리신 하나님의 아들을 믿는 믿음 안에서 사는 것이라(갈라디아서 2:20)",
+  "이는 내 생각이 너희의 생각과 다르며 내 길은 너희의 길과 다름이니라 여호와의 말씀이니라 이는 하늘이 땅보다 높음 같이 내 길은 너희의 길보다 높으며 내 생각은 너희의 생각보다 높음이니라(이사야 55:8~9)",
+  "이같이 너희 빛이 사람 앞에 비치게 하여 그들로 너희 착한 행실을 보고 하늘에 계신 너희 아버지께 영광을 돌리게 하라(마태복음 5:16)",
+  "그런즉 너희가 먹든지 마시든지 무엇을 하든지 다 하나님의 영광을 위하여 하라(고린도전서 10:31)",
+  "우리가 알거니와 하나님을 사랑하는 자 곧 그의 뜻대로 부르심을 입은 자들에게는 모든 것이 합력하여 선을 이루느니라(로마서 8:28)",
+  "너희가 전에는 어둠이더니 이제는 주 안에서 빛이라 빛의 자녀들처럼 행하라 빛의 열매는 모든 착함과 의로움과 진실함에 있느니라(에베소서 5:8-9)",
+  "나는 포도나무요 너희는 가지라 그가 내 안에, 내가 그 안에 거하면 사람이 열매를 많이 맺나니 나를 떠나서는 너희가 아무것도 할 수 없음이라(요한복음 15:5)",
+  "너희가 내게 부르짖으며 내게 와서 기도하면 내가 너희들의 기도를 들을 것이요 너희가 온 마음으로 나를 구하면 나를 찾을 것이요 나를 만나리라(예레미야 29:12-13)",
+  "너희는 이 세대를 본받지 말고 오직 마음을 새롭게 함으로 변화를 받아 하나님의 선하시고 기뻐하시고 온전하신 뜻이 무엇인지 분별하도록 하라(로마서 12:2)",
+  "그런즉 누구든지 그리스도 안에 있으면 새로운 피조물이라 이전 것은 지나갔으니 보라 새 것이 되었도다(고린도후서 5:17)",
+  "새 계명을 너희에게 주노니 서로 사랑하라 내가 너희를 사랑한 것 같이 너희도 서로 사랑하라(요한복음 13:34)",
+  "이것을 너희에게 이르는 것은 너희로 내 안에서 평안을 누리게 하려 함이라 세상에서는 너희가 환난을 당하나 담대하라 내가 세상을 이기었노라(요한복음 16:33)",
+  "오직 여호와를 앙망하는 자는 새 힘을 얻으리니 독수리가 날개치며 올라감 같을 것이요 달음박질하여도 곤비하지 아니하겠고 걸어가도 피곤하지 아니하리로다(이사야 40:31)",
+  "그런즉 너희가 먹든지 마시든지 무엇을 하든지 다 하나님의 영광을 위하여 하라(고린도전서 10:31)"
+];
+
+const dailyBread = [
+  { day:"DAY1", date:"8월 8일 토요일", title:"누구로부터 온 자격인가요?", ref:"누가복음 20:1~8",
+    verses:[
+      "하루는 예수께서 성전에서 백성을 가르치시며 복음을 전하실새 대제사장들과 서기관들이 장로들과 함께 가까이 와서",
+      "말하여 이르되 당신이 무슨 권위로 이런 일을 하는지 이 권위를 준 이가 누구인지 우리에게 말하라",
+      "대답하여 이르시되 나도 한 말을 너희에게 물으리니 내게 말하라",
+      "요한의 세례가 하늘로부터냐 사람으로부터냐",
+      "그들이 서로 의논하여 이르되 만일 하늘로부터라 하면 어찌하여 그를 믿지 아니하였느냐 할 것이요",
+      "만일 사람으로부터라 하면 백성이 요한을 선지자로 인정하니 그들이 다 우리를 돌로 칠 것이라 하고",
+      "대답하되 어디로부터인지 알지 못하노라 하니",
+      "예수께서 이르시되 나도 무슨 권위로 이런 일을 하는지 너희에게 이르지 아니하리라 하시니라"
+    ],
+    prompt:"종교 지도자들은 예수님의 권위에 도전하며 따졌어요. 예수님은 그들의 마음속에 하나님을 향한 진심이 없다는 것을 아시고, 거꾸로 요한의 세례가 하나님께로부터 온 것인지 물으셨어요. 나는 내 마음의 주인되신 하나님이 기뻐하시는 일이 무엇인지 고민하나요?"},
+  { day:"DAY2", date:"8월 9일 주일", title:"주님이 기뻐하시는 열매를 맺어요", ref:"누가복음 20:9~18",
+    verses:[
+      "그가 또 이 비유로 백성에게 말씀하시기 시작하시니라 한 사람이 포도원을 만들어 농부들에게 세로 주고 타국에 가서 오래 있다가",
+      "때가 이르매 포도원 소출 얼마를 바치게 하려고 한 종을 농부들에게 보내니 농부들이 종을 몹시 때리고 거저 보내었거늘",
+      "다시 다른 종을 보내니 그도 몹시 때리고 능욕하고 거저 보내었거늘",
+      "다시 세 번째 종을 보내니 이 종도 상하게 하고 내쫓은지라",
+      "포도원 주인이 이르되 어찌할까 내 사랑하는 아들을 보내리니 그들이 혹 그는 존대하리라 하였더니",
+      "농부들이 그를 보고 서로 의논하여 이르되 이는 상속자니 죽이고 그 유산을 우리의 것으로 만들자 하고",
+      "포도원 밖에 내쫓아 죽였느니라 그런즉 포도원 주인이 이 사람들을 어떻게 하겠느냐",
+      "와서 그 농부들을 진멸하고 포도원을 다른 사람들에게 주리라 하시니 사람들이 듣고 이르되 그렇게 되지 말아지이다 하거늘",
+      "그들을 보시며 이르시되 그러면 기록된 바 건축자들의 버린 돌이 모퉁이의 머릿돌이 되었느니라 함이 어찜이냐",
+      "무릇 이 돌 위에 떨어지는 자는 깨어지겠고 이 돌이 사람 위에 떨어지면 그를 가루로 만들어 흩으리라 하시니라"
+    ],
+    prompt:"예수님은 포도원을 맡은 악한 농부들의 비유를 들려주셨어요. 예수님의 은혜를 거절하는 자는 심판을 받지만, 하나님께서 맡기신 삶 속에 열매 맺는 삶을 사는 사람들은 칭찬을 받아요. 우리가 맺어야 하는 열매는 무엇인가요?"},
+  { day:"DAY3", date:"8월 10일 월요일", title:"모든 질서를 지켜요", ref:"누가복음 20:19~26",
+    verses:[
+      "서기관들과 대제사장들이 예수의 이 비유는 자기들을 가리켜 말씀하심인 줄 알고 즉시 잡고자 하되 백성을 두려워하더라",
+      "이에 그들이 엿보다가 예수를 총독의 다스림과 권세 아래에 넘기려 하여 정탐들을 보내어 그들로 스스로 의인인 체하며 예수의 말을 책잡게 하니",
+      "그들이 물어 이르되 선생님이여 우리가 아노니 당신은 바로 말씀하시고 가르치시며 사람을 외모로 취하지 아니하시고 오직 진리로써 하나님의 도를 가르치시나이다",
+      "우리가 가이사에게 세를 바치는 것이 옳으니이까 옳지 않으니이까 하니",
+      "예수께서 그 간계를 아시고 이르시되",
+      "데나리온 하나를 내게 보이라 누구의 형상과 글이 여기 있느냐 대답하되 가이사의 것이니이다",
+      "이르시되 그런즉 가이사의 것은 가이사에게, 하나님의 것은 하나님께 바치라 하시니",
+      "그들이 백성 앞에서 그의 말을 능히 책잡지 못하고 그의 대답을 놀랍게 여겨 침묵하니라"
+    ],
+    prompt:"예수님을 함정에 빠뜨리려는 질문에 주님은 가이사의 것은 가이사에게, 하나님의 것은 하나님께 바치라는 대답을 주셨어요. 우리의 마음에는 하나님의 형상이 새겨져 있기에 우리는 온전히 하나님의 소유예요. 오늘 나에게 주어진 시간과 소유는 하나님의 것인가요?"},
+  { day:"DAY4", date:"8월 11일 화요일", title:"부활에 대한 예수님의 말씀", ref:"누가복음 20:27~40",
+    verses:[
+      "부활이 없다고 주장하는 사두개인 중 어떤 이들이 와서",
+      "물어 이르되 선생님이여 모세가 우리에게 써 주기를 만일 어떤 사람의 형이 아내를 두고 자식이 없이 죽으면 그 동생이 그 아내를 취하여 형을 위하여 상속자를 세울지니라 하였나이다",
+      "그런데 칠 형제가 있었는데 맏이가 아내를 취하였다가 자식이 없이 죽고",
+      "그 둘째와 셋째가 그를 취하고",
+      "일곱이 다 그와 같이 자식이 없이 죽고",
+      "그 후에 여자도 죽었나이다",
+      "일곱이 다 그를 아내로 취하였으니 부활 때에 그 중에 누구의 아내가 되리이까",
+      "예수께서 이르시되 이 세상의 자녀들은 장가도 가고 시집도 가되",
+      "저 세상과 및 죽은 자 가운데서 부활함을 얻기에 합당히 여김을 받은 자들은 장가 가고 시집 가는 일이 없으며",
+      "그들은 다시 죽을 수도 없나니 이는 천사와 동등이요 부활의 자녀로서 하나님의 자녀임이라",
+      "죽은 자가 살아난다는 것은 모세도 가시나무 떨기에 관한 글에서 주를 아브라함의 하나님이요 이삭의 하나님이요 야곱의 하나님이시라 칭하였나니",
+      "하나님은 죽은 자의 하나님이 아니요 살아 있는 자의 하나님이시라 하나님에게는 모든 사람이 살았느니라 하시니",
+      "서기관 중 어떤 이들이 말하되 선생님 잘 말씀하셨나이다 하니",
+      "그들은 아무 것도 감히 더 물을 수 없음이더라"
+    ],
+    prompt:"질문으로 예수님을 곤란하게 하려한 사두개인에게 예수님은 하나님은 살아있는 자의 하나님이라고 대답하십니다. 나는 오늘 살아계신 하나님을 믿으며 하나님의 자녀로 살아가고 있나요?"},
+  { day:"DAY5", date:"8월 12일 수요일", title:"진실된 마음으로 나아가요", ref:"누가복음 20:41~47",
+    verses:[
+      "예수께서 그들에게 이르시되 사람들이 어찌하여 그리스도를 다윗의 자손이라 하느냐",
+      "시편에 다윗이 친히 말하였으되 주께서 내 주께 이르시되",
+      "내가 네 원수를 네 발등상으로 삼을 때까지 내 우편에 앉았으라 하셨도다 하였느니라",
+      "그런즉 다윗이 그리스도를 주라 칭하였으니 어찌 그의 자손이 되겠느냐 하시니라",
+      "모든 백성이 들을 때에 예수께서 그 제자들에게 이르시되",
+      "긴 옷을 입고 다니는 것을 원하며 시장에서 문안 받는 것과 회당의 높은 자리와 잔치의 윗자리를 좋아하는 서기관들을 삼가라",
+      "그들은 과부의 가산을 삼키며 외식으로 길게 기도하니 그들이 더 엄중한 심판을 받으리라 하시니라"
+    ],
+    prompt:"예수님은 겉모습만 화려하게 꾸미는 율법학자를 조심하라고 말씀하셨어요. 그들은 길고 멋진 옷을 입고 시장에서 인사받는 것을 즐겼으며, 예배당의 가장 높은 자리에 앉았고 기도를 길게 하면서 경건해 보이려 노력했어요. 나에게도 율법학자처럼 사람들에게 멋있어 보이고 싶은 마음이 생길 때, 어떻게 해야할까요?"},
+  { day:"DAY6", date:"8월 13일 목요일", title:"나의 전부를 드려요", ref:"누가복음 21:1~9",
+    verses:[
+      "예수께서 눈을 들어 부자들이 헌금함에 헌금 넣는 것을 보시고",
+      "또 어떤 가난한 과부가 두 렙돈 넣는 것을 보시고",
+      "이르시되 내가 참으로 너희에게 말하노니 이 가난한 과부가 다른 모든 사람보다 많이 넣었도다",
+      "저들은 그 풍족한 중에서 헌금을 넣었거니와 이 과부는 그 가난한 중에서 자기가 가지고 있는 생활비 전부를 넣었느니라 하시니라",
+      "어떤 사람들이 성전을 가리켜 그 아름다운 돌과 헌물로 꾸민 것을 말하매 예수께서 이르시되",
+      "너희 보는 이것들이 날이 이르면 돌 하나도 돌 위에 남지 않고 다 무너뜨려지리라",
+      "그들이 물어 이르되 선생님이여 그러면 어느 때에 이런 일이 있겠사오며 이런 일이 일어나려 할 때에 무슨 징조가 있사오리이까",
+      "이르시되 미혹을 받지 않도록 주의하라 많은 사람이 내 이름으로 와서 이르되 내가 그라 하며 때가 가까이 왔다 하겠으나 그들을 따르지 말라",
+      "난리와 소요의 소문을 들을 때에 두려워하지 말라 이 일이 먼저 있어야 하되 끝은 곧 되지 아니하리라"
+    ],
+    prompt:"예수님께서 성전에서 사람들이 헌금하는 것을 보고 계실 때였어요. 부자들은 쓰고 남은 많은 돈을 드렸고, 가난한 과부는 생활비 전부(두 렙돈)를 드렸어요. 예수님은 이 과부가 다른 사람들보다 더 많이 드렸다고 말씀하셨어요. '나의 전부를 드린다'는 것은 어떤 뜻일까요?"}
+];
+
+const ministryDays = [
+  {day:"DAY1", date:"8월 8일 토요일"},
+  {day:"DAY2", date:"8월 9일 주일"},
+  {day:"DAY3", date:"8월 10일 월요일"},
+  {day:"DAY4", date:"8월 11일 화요일"},
+  {day:"DAY5", date:"8월 12일 수요일"},
+  {day:"DAY6", date:"8월 13일 목요일"}
+];
+
+const songs = [
+  ["꽃들도","-"],
+  ["너는 꽃이야","이시온"],
+  ["예수 우리들의 밝은 빛","Takafumi Nagasawa"],
+  ["행복","손경민"],
+  ["더 원합니다 (慕い求めます)","Takafumi Nagasawa"],
+  ["주님의 마음 있는 곳","아이자야식스티원"],
+  ["나로부터 시작되리","전혁·남재선 편곡"],
+  ["부흥 있으리라","Renee Morris"],
+  ["내 마음을 가득 채운 (Here I am again)","Tommy Walker"],
+  ["거리마다 기쁨으로","Reuben Morgan"],
+  ["당신의 날에","송민선 작사 · 김채림 작곡"],
+  ["주를 찾는 모든 자들이","이준행"],
+  ["너는 세상의 빛이라","송예은 작사 · 조은별 작곡"],
+  ["물이 바다 덮음 같이","고형현"],
+  ["비 준비하시니","심형진"],
+  ["주가 일하시네","이혁진"],
+  ["주의 나라가 임할 때","심형진"],
+  ["날 세우시네 (You Raise Me Up)","R. Lovland &amp; B. Graham"],
+  ["우리가 주를 더욱 사랑하고","박은총 작사 · 김채림 작곡"],
+  ["좋으신 하나님 (You are Good)","Israel Houghton"],
+  ["우리는 주의 움직이는 교회","김현철"]
+];
+
+const cautions = [
+  { emoji:"🚇", title:"복잡한 지하철·버스에서 '매너 챔피언' 되기", items:[
+    "지하철 안은 쉿! 조용히 말하고 행동해요",
+    "가방은 앞으로 메거나 발 아래에 놓아요",
+    "장난은 지하철 노우~ 노우~",
+    "열차 문이 닫힐 땐 무리하게 타지 않고 기다려요"
+  ]},
+  { emoji:"🚸", title:"도쿄 거리에서 '안전 대장' 되기", intro:"복잡한 신주쿠, 우에노 공원과 아사쿠사, 오다이바에서 안전하게 복음을 전해요.", items:[
+    "좌측통행! 차도 왼쪽으로 길을 걸을 때는 왼쪽으로",
+    "길을 걸어가면서 음료수나 간식 먹지 않아요. 목이 마를 때에는 가게 앞에서 잠시",
+    "쓰레기는 가방 속 주머니에 잘 넣어두었다가 숙소(교회)에 돌아와서 버려요.",
+    "사람들이 많은 신주쿠나 아사쿠사에서는 한눈을 팔지 않아요. 반드시 선생님께 먼저 말하고 친구와 함께 움직여요."
+  ]},
+  { emoji:"🎤", title:"버스킹 및 거리전도 '매너 포인트'", intro:"우리가 찬양하고 복음을 전할 때, 예수님의 사랑이 예쁘게 전달되도록 매너를 지켜요.", items:[
+    "언제나 웃는 얼굴로 인사해요! 예쁜 미소로 \"아리가토 고자이마스(감사합니다)\"",
+    "버스킹이나 노방전도 시에, 지나가는 사람들의 길을 막지 않도록 조심해요."
+  ]},
+  { emoji:"🍱", title:"일본 식당에서 '식사 예절 박사' 되기", intro:"일본 식당은 조용한 곳이 많아요. 맛있는 음식을 감사히 먹으며 예수님의 향기를 전해요!", items:[
+    "자리에 앉을 때는 직원의 안내를 기다려요",
+    "1인 1메뉴는 기본 약속. 친구와 나눠 먹고 싶더라도 각자 메뉴를 하나씩 골라요.",
+    "젓가락으로 음식을 주고받지 않아요. 음식을 나눌 때에는 '앞접시'에 놓아주세요.",
+    "밥그릇이나 국그릇을 손으로 들고 입 가까이 대고 소리내지 않고 먹어요.",
+    "자리에 앉으면 주는 물티슈(오시보리)는 '손만' 닦는 용도예요."
+  ]},
+  { emoji:"🏠", title:"숙소(일본 교회)에서 '배려 천사' 되기", intro:"우리가 5박 6일 동안 머무는 곳은 현지 일본 교회의 소중한 예배 공간이자 생활 공간이에요.", items:[
+    "현관에 신발을 벗을 때는 신발을 가지런히 놓아 두세요.",
+    "밤 9시 이후에는 '숙삭임 모드'로, 걸음걸이도 살금살금.",
+    "화장실과 샤워실은 다음 사람을 위해 짧고 깨끗하게 사용해요",
+    "내 옷, 수건, 물병, 화장품 등 내 물건은 매일 아침저녁 가방 안에 정리해요.",
+    "교회를 내어주신 일본 교회 목사님과 성도님들께 고마운 마음을 밝은 목소리로 인사해요! \"아리가토 고자이마스!(감사합니다)\" 혹은 \"오하요 고자이마스!(안녕하세요)\""
+  ]}
+];
+
+const earthquake = {
+  emoji:"⚠️", title:"지진·재난 상황에서 '침착 대장' 되기",
+  intro:"지진이 발생하면 당황하지 않고, 학교에서 배웠던 대로 조용하고 빠르게 행동해요.",
+  groups:[
+    { h:"방 안(숙소)에서 지진을 느꼈을 때:", items:["쿠션이나 베개로 머리 보호하기", "튼튼한 탁자나 테이블 밑으로 들어가 흔들림이 멈출 때까지 기다려요.", "문이 뒤틀려 갇히지 않도록, 내 주변 문을 살짝 열어두어요."]},
+    { h:"길거리나 야외에서 지진을 느꼈을 때:", items:["가방으로 머리를 폭 감싸고, 넓은 공터나 공원 쪽으로 이동해요.", "자판기나 담벼락 근처에 가까이 가지 않아요."]},
+    { h:"지하철이나 식당에서 지진을 느꼈을 때:", items:["안내방송과 직원의 지시에 따라 침착하게 따라 움직여요."]}
+  ],
+  common: ["울거나 소리 지르지 않고 선생님의 지시를 귀담아들어요.", "절대 혼자서 움직이지 말고, 즉시 우리 선생님 곁으로 모여요."]
+};
+
+/* ================= RENDER ================= */
+
+function el(html){ const d=document.createElement('div'); d.innerHTML=html.trim(); return d.firstElementChild; }
+
+// schedule table
+(function(){
+  const t = document.getElementById('scheduleTable');
+  let html = '<tr><th style="width:64px">날짜</th><th>오전/오후</th><th>저녁</th></tr>';
+  schedule.forEach(r=>{
+    html += `<tr><td class="day">${r[0]}</td><td>${r[1]}${r[2]?('<br>'+r[2]):''}</td><td>${r[3]||''}</td></tr>`;
+  });
+  t.innerHTML = html;
+})();
+
+// japanese tables
+(function(){
+  const b = document.getElementById('jpBlock');
+  let html='';
+  jpTables.forEach(cat=>{
+    html += `<div class="jp-cat">${cat.cat}</div>`;
+    cat.rows.forEach(r=>{
+      html += `<div class="jp-row"><span class="kr">${r[0]}</span><span class="jp">${r[1]}</span><span class="ro">${r[2]}</span></div>`;
+    });
+  });
+  b.innerHTML = html;
+})();
+
+// gospel steps
+(function(){
+  const b = document.getElementById('gospelBlock');
+  let html='';
+  gospel.forEach((g,i)=>{
+    html += `<div class="step-card ${g.cls}">
+      <div class="stepnum">${i+1}</div>
+      <h4>${g.title}</h4>
+      <p class="jp">${g.jp}</p>
+      <p>${g.kr}</p>
+      <h4 style="margin-top:10px">${g.title2}</h4>
+      ${g.ref?`<div class="ref">(${g.ref})</div>`:''}
+    </div>`;
+  });
+  b.innerHTML = html;
+})();
+
+// sweet words
+(function(){
+  const b = document.getElementById('swGrid');
+  let html='';
+  sweetWords.forEach((w,i)=>{
+    const m = w.match(/^(.*)\((.*)\)$/);
+    const text = m ? m[1].trim() : w;
+    const ref = m ? m[2] : '';
+    html += `<div class="sw-card"><span class="tag">달달말씀 ${i+1}</span><div>${text}</div>${ref?`<span class="ref">${ref}</span>`:''}</div>`;
+  });
+  b.innerHTML = html;
+})();
+
+// daily bread
+(function(){
+  const b = document.getElementById('dailyBlock');
+  let html='';
+  dailyBread.forEach((d,idx)=>{
+    const verseHtml = d.verses.map((v,i)=>`<sup>${i+1}</sup>${v}`).join(' ');
+    html += `<div class="day-card">
+      <div class="day-bar"><span class="badge">${d.day}</span><span class="date">${d.date}</span></div>
+      <div class="content">
+        <p class="qtitle">${d.title}</p>
+        <div class="ref">${d.ref}</div>
+        <div class="scripture">${verseHtml}</div>
+        <div class="mind-box">
+          <div class="htag">마음톡 ♡</div>
+          <div class="prompt">${d.prompt}</div>
+          <textarea class="note" data-key="daily_${idx}" placeholder="나의 생각을 적어보세요 ✏️"></textarea>
+          <div class="save-row"><span class="save-status" id="daily_${idx}_status">저장됨 ✓</span></div>
+        </div>
+      </div>
+    </div>`;
+  });
+  b.innerHTML = html;
+})();
+
+// ministry days
+(function(){
+  const b = document.getElementById('ministryBlock');
+  let html='';
+  ministryDays.forEach((d,idx)=>{
+    html += `<div class="day-card">
+      <div class="day-bar" style="background:#7B1FA2"><span class="badge" style="color:#7B1FA2">${d.day}</span><span class="date">${d.date}</span></div>
+      <div class="ministry-box">
+        <div class="lbl">📝 사역일지 &amp; 감사제목</div>
+        <textarea class="note" data-key="ministry_log_${idx}" placeholder="오늘 사역하며 있었던 일, 감사한 일을 적어보세요"></textarea>
+        <div class="save-row"><span class="save-status" id="ministry_log_${idx}_status">저장됨 ✓</span></div>
+        <div class="lbl">🙏 오늘의 기도</div>
+        <textarea class="note" data-key="ministry_prayer_${idx}" placeholder="오늘 드리고 싶은 기도를 적어보세요"></textarea>
+        <div class="save-row"><span class="save-status" id="ministry_prayer_${idx}_status">저장됨 ✓</span></div>
+      </div>
+    </div>`;
+  });
+  b.innerHTML = html;
+})();
+
+// song list
+(function(){
+  const b = document.getElementById('songList');
+  let html='';
+  songs.forEach((s,i)=>{
+    html += `<div class="song-item"><span class="no">${i+1}</span><span class="nm">${s[0]}</span><span class="cp">${s[1]}</span></div>`;
+  });
+  b.innerHTML = html;
+})();
+
+// caution
+(function(){
+  const b = document.getElementById('cautionBlock');
+  let html='';
+  cautions.forEach(c=>{
+    html += `<div class="caution-card">
+      <div class="ch"><span>${c.emoji}</span><span>${c.title}</span></div>
+      ${c.intro?`<p class="intro">${c.intro}</p>`:''}
+      <ul>${c.items.map(i=>`<li>${i}</li>`).join('')}</ul>
+    </div>`;
+  });
+  // earthquake special
+  let eqHtml = `<div class="caution-card"><div class="ch"><span>${earthquake.emoji}</span><span>${earthquake.title}</span></div><p class="intro">${earthquake.intro}</p>`;
+  earthquake.groups.forEach(g=>{
+    eqHtml += `<p class="intro" style="font-weight:700;color:var(--navy);margin-top:10px">${g.h}</p><ul>${g.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+  });
+  eqHtml += `<p class="intro" style="font-weight:700;color:var(--navy);margin-top:10px">공통 필수 약속:</p><ul>${earthquake.common.map(i=>`<li>${i}</li>`).join('')}</ul></div>`;
+  html += eqHtml;
+  b.innerHTML = html;
+})();
+
+// nav drawer
+(function(){
+  const list = document.getElementById('navList');
+  const items = [
+    ["#sec-journey","01","선교의 여정"],
+    ["#sec-japanese","02","선교 일본어"],
+    ["#sec-gospel","03","영생 얻는 길"],
+    ["#sec-sweetwords","04","달달 말씀"],
+    ["#sec-daily","05","매일의 양식"],
+    ["#sec-ministry","06","오늘의 사역"],
+    ["#sec-praise","07","은혜의 찬양"],
+    ["#sec-caution","08","주의사항"],
+    ["#sec-note","09","칭찬노트"]
+  ];
+  list.innerHTML = items.map(i=>`<li><a href="${i[0]}">${i[1]} · ${i[2]}</a></li>`).join('');
+})();
+
+/* ================= NOTE SAVE (localStorage) ================= */
+function loadAllNotes(){
+  document.querySelectorAll('textarea.note[data-key]').forEach(t=>{
+    const v = localStorage.getItem('outreach_'+t.dataset.key);
+    if(v) t.value = v;
+  });
+  const pv = localStorage.getItem('outreach_praise_note');
+  if(pv) document.getElementById('praiseNote').value = pv;
+  const nv = localStorage.getItem('outreach_my_name');
+  if(nv) document.getElementById('myNameInput').value = nv;
+}
+function attachSaveHandlers(){
+  let timers = {};
+  document.querySelectorAll('textarea.note[data-key]').forEach(t=>{
+    t.addEventListener('input', ()=>{
+      clearTimeout(timers[t.dataset.key]);
+      timers[t.dataset.key] = setTimeout(()=>{
+        localStorage.setItem('outreach_'+t.dataset.key, t.value);
+        const st = document.getElementById(t.dataset.key+'_status');
+        if(st){ st.classList.add('show'); setTimeout(()=>st.classList.remove('show'), 1600); }
+      }, 500);
+    });
+  });
+  const pn = document.getElementById('praiseNote');
+  let pTimer;
+  pn.addEventListener('input', ()=>{
+    clearTimeout(pTimer);
+    pTimer = setTimeout(()=>{
+      localStorage.setItem('outreach_praise_note', pn.value);
+      const st = document.getElementById('praiseStatus');
+      st.classList.add('show'); setTimeout(()=>st.classList.remove('show'), 1600);
+    }, 500);
+  });
+  const nameInput = document.getElementById('myNameInput');
+  let nTimer;
+  nameInput.addEventListener('input', ()=>{
+    clearTimeout(nTimer);
+    nTimer = setTimeout(()=>{
+      localStorage.setItem('outreach_my_name', nameInput.value);
+    }, 400);
+  });
+}
+loadAllNotes();
+attachSaveHandlers();
+
+/* ================= NAV DRAWER TOGGLE ================= */
+const drawer = document.getElementById('drawer');
+const scrim = document.getElementById('scrim');
+document.getElementById('burgerBtn').addEventListener('click', ()=>{
+  drawer.classList.add('open'); scrim.classList.add('show');
+});
+scrim.addEventListener('click', closeDrawer);
+function closeDrawer(){ drawer.classList.remove('open'); scrim.classList.remove('show'); }
+document.getElementById('navList').addEventListener('click', (e)=>{
+  if(e.target.tagName==='A'){ closeDrawer(); }
+});
+
+/* ================= SERVICE WORKER (오프라인 지원) ================= */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(err=>console.log('SW 등록 실패', err));
+  });
+}
+</script>
+</body>
+</html>
